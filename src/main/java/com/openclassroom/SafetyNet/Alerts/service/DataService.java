@@ -140,4 +140,43 @@ public class DataService {
         return before != list.size();
     }
 
+    // MEDICAL RECORD: CRUD helpers
+
+    public Optional<MedicalRecord> findMedicalRecord(String first, String last) {
+        if (dataWrapper == null) return Optional.empty();
+        return dataWrapper.getMedicalrecords().stream()
+                .filter(mr -> mr.getFirstName().equalsIgnoreCase(first)
+                        && mr.getLastName().equalsIgnoreCase(last))
+                .findFirst();
+    }
+
+    // POST: ajoute d'un dossier medical
+
+    public boolean addMedicalRecord(MedicalRecord record) {
+        if (dataWrapper == null) return false;
+        boolean exists = findMedicalRecord(record.getFirstName(), record.getLastName()).isPresent();
+        if (exists) return false;
+        return dataWrapper.getMedicalrecords().add(record);
+    }
+
+    // PUT: mise à jour d'un dossier
+    public boolean updateMedicalRecord(String first, String last,  MedicalRecord updates) {
+        if (dataWrapper == null) return false;
+        var opt = findMedicalRecord(first, last);
+        if (opt.isEmpty()) return false;
+
+        MedicalRecord target = opt.get();
+        target.setBirthdate(updates.getBirthdate());
+        target.setMedications(updates.getMedications() != null ? updates.getMedications() : List.of());
+        target.setAllergies(updates.getAllergies() != null ? updates.getAllergies() : List.of());
+        return true;
+    }
+
+    // DELETE: supprime un dossier medical
+
+    public boolean deleteMedicalRecord(String first, String last) {
+        if (dataWrapper == null) return false;
+        return dataWrapper.getMedicalrecords().removeIf(mr -> mr.getFirstName().equalsIgnoreCase(first) && mr.getLastName().equalsIgnoreCase(last));
+    }
+
 }

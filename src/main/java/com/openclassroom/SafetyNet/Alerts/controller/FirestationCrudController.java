@@ -17,6 +17,8 @@ public class FirestationCrudController {
 
     private final FirestationCrudService firestationCrudService;
 
+    // GET
+
     @GetMapping("/_all")
     public List<Firestation> all() {
         return firestationCrudService.getAll();
