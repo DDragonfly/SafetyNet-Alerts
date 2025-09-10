@@ -66,7 +66,7 @@ public class DataService {
                 .findFirst();
     }
 
-    // Ajout nouvelle personne si pas existante
+    // POST Ajout nouvelle personne si pas existante
     public boolean addPerson(Person p) {
         if (dataWrapper == null) return false;
         boolean exists = findPerson(p.getFirstName(), p.getLastName()).isPresent();
@@ -74,7 +74,7 @@ public class DataService {
         return dataWrapper.getPersons().add(p);
     }
 
-    // Mise à jour personne existante
+    // PUT Mise à jour personne existante
     public boolean updatePerson(String first, String last, Person updates) {
         if (dataWrapper == null) return false;
         var opt = findPerson(first, last);
@@ -89,9 +89,55 @@ public class DataService {
         return true;
     }
 
-    // Supprimer une personne
+    // DELETE Supprimer une personne
     public boolean deletePerson(String first, String last) {
         if (dataWrapper == null) return false;
         return dataWrapper.getPersons().removeIf(p -> p.getFirstName().equalsIgnoreCase(first) && p.getLastName().equalsIgnoreCase(last));
     }
+
+    // FIRESTATION: CRUD helpers
+
+    public Optional<Firestation> findFirestationByAddress(String address) {
+        if (dataWrapper == null) return Optional.empty();
+        return dataWrapper.getFirestations().stream().filter(fs -> fs.getAddress().equalsIgnoreCase(address)).findFirst();
+    }
+
+    // POST ajout d'un mapping caserme/addresse
+    public boolean addFirestation(Firestation mapping) {
+        if (dataWrapper == null) return false;
+        boolean exists = findFirestationByAddress(mapping.getAddress()).isPresent();
+        if (exists) return false;
+        return dataWrapper.getFirestations().add(mapping);
+    }
+
+    // PUT Mise à jour du numéro de la caserne de pompiers d'une adresse
+    public boolean updateFirestationStation(String address, String newStation) {
+        if (dataWrapper == null) return false;
+        String target = address == null ? "" : address.trim();
+        String station = newStation == null ? "" : newStation.trim();
+
+        return dataWrapper.getFirestations().stream()
+                .filter(fs -> fs.getAddress() != null && fs.getAddress().trim().equalsIgnoreCase(target))
+                .findFirst()
+                .map(fs -> { fs.setStation(station); return true; })
+                .orElse(false);
+    }
+
+    // DELETE supprime le mapping d'une adresse
+    public boolean deleteFirestationByAddress(String address) {
+        if (dataWrapper == null) return false;
+        String target = address == null ? "" : address.trim();
+        return dataWrapper.getFirestations().removeIf(fs -> fs.getAddress() != null && fs.getAddress().trim().equalsIgnoreCase(target));
+    }
+
+    // DELETE supprime le mapping d'une caserme
+    public boolean deleteFirestationsByStation(String station) {
+        if (dataWrapper == null) return false;
+        String target = station == null ? "" : station.trim();
+        var list = dataWrapper.getFirestations();
+        int before = list.size();
+        list.removeIf(fs -> fs.getStation() != null && fs.getStation().trim().equalsIgnoreCase(target));
+        return before != list.size();
+    }
+
 }
