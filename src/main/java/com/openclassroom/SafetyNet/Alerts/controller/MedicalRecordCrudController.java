@@ -24,12 +24,17 @@ public class MedicalRecordCrudController {
     public List<MedicalRecord> all() {
         return medicalRecordCrudService.getAll();
     }
+
     // POST /medicalRecord -> creation nouveau dossier
     @PostMapping
     public ResponseEntity<?> create(@RequestBody MedicalRecord body) {
-        if (isBlank(body.getFirstName()) || isBlank(body.getLastName())) {
-            return ResponseEntity.badRequest().body("First Name and Last Name are required");
+        if (isBlank(body.getFirstName()) || isBlank(body.getLastName()) || isBlank(body.getBirthdate())) {
+            return ResponseEntity.badRequest().body("First Name, Last Name and birthdate are required");
         }
+
+        if (body.getMedications() == null) body.setMedications(List.of());
+        if (body.getAllergies() == null) body.setAllergies(List.of());
+
         boolean created = medicalRecordCrudService.create(body);
         if (!created) {
             return ResponseEntity.status(409).body("Medical record already exists");

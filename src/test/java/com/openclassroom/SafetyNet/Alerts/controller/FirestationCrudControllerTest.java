@@ -105,4 +105,91 @@ public class FirestationCrudControllerTest {
                 .andExpect(status().isNoContent())
                 .andExpect(content().string(""));
     }
+
+    @Test
+    void post_badRequest_whenMissingFields() throws Exception {
+        mvc.perform(post("/firestation")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+{"address":"748 Townings Dr"}
+"""))
+                .andExpect(status().isBadRequest());
+        mvc.perform(post("/firestation")
+        .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+{"station":"4"}
+"""))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void post_created_ok() throws Exception {
+        when(firestationCrudService.create(any(Firestation.class))).thenReturn(true);
+
+        mvc.perform(post("/firestation")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content("""
+                    {"address":"748 Townings Dr","station":"4"}
+        """))
+                .andExpect(status().isCreated());
+    }
+
+    // case limites
+
+    @Test
+    void put_badRequest_whenMissingFields() throws Exception {
+        mvc.perform(put("/firestation")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content("""
+                    {"address":"748 Townings Dr"}
+        """))
+                .andExpect(status().isBadRequest());
+
+        mvc.perform(put("/firestation")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content("""
+                {"station":"2"}
+        """))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void put_notFound_whenAddressUnknown()  throws Exception {
+        when(firestationCrudService.updateStationForAddress("Unknown", "2")).thenReturn(false);
+
+        mvc.perform(put("/firestation")
+        .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+{"address":"Unknown","station":"2"}
+"""))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void delete_byAddress_204_or_404() throws Exception {
+        when(firestationCrudService.deleteByAddress("748 Townings Dr")).thenReturn(true);
+        mvc.perform(delete("/firestation").param("address", "748 Townings Dr"))
+                .andExpect(status().isNoContent());
+        when(firestationCrudService.deleteByAddress("Unknown")).thenReturn(false);
+        mvc.perform(delete("/firestation").param("address", "Unknown"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void delete_byStation_204_or_404() throws Exception {
+        when(firestationCrudService.deleteByStation("3")).thenReturn(true);
+        mvc.perform(delete("/firestation").param("station", "3"))
+                .andExpect(status().isNoContent());
+
+        when(firestationCrudService.deleteByStation("99")).thenReturn(false);
+        mvc.perform(delete("/firestation").param("station", "99"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void delete_badRequest_whenMissingBothParam() throws Exception {
+        mvc.perform(delete("/firestation"))
+                .andExpect(status().isBadRequest());
+
+    }
 }

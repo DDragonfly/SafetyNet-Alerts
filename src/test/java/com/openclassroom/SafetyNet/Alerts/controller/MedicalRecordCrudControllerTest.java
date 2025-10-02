@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -83,5 +84,79 @@ public class MedicalRecordCrudControllerTest {
         mvc.perform(delete("/medicalRecord?firstName=Monica&lastName=Geller"))
                 .andExpect(status().isNoContent());
     }
+
+    // case limites
+    @Test
+    void post_badRequest_whenMissingFields() throws Exception {
+        mvc.perform(post("/medicalRecord")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"firstName":"Monica","lastName":"Geller"}
+                                """))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(medicalRecordCrudService);
+    }
+
+    @Test
+    void post_created_conflict() throws Exception {
+        when(medicalRecordCrudService.create(any(MedicalRecord.class))).thenReturn(true);
+        mvc.perform(post("/medicalRecord")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"firstName":"Monica","lastName":"Geller", "birthdate":"03/06/1984","medications": [],"allergies": []}
+                                """))
+                .andExpect(status().isCreated());
+
+        when(medicalRecordCrudService.create(any(MedicalRecord.class))).thenReturn(false);
+        mvc.perform(post("/medicalRecord")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"firstName":"Monica","lastName":"Geller", "birthdate":"03/06/1984"}
+                                """))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void put_ok_or_notFound_or_badRequest() throws Exception {
+        when(medicalRecordCrudService.update(eq("Monica"), eq("Geller"), any(MedicalRecord.class))).thenReturn(true);
+        mvc.perform(put("/medicalRecord?firstName=Monica&lastName=Geller")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"birthdate":"03/06/1984","medications":["newmed:10mg"],"allergies": []}
+                                """))
+                .andExpect(status().isOk());
+
+        when(medicalRecordCrudService.update(eq("Ross"), eq("Geller"), any(MedicalRecord.class))).thenReturn(false);
+        mvc.perform(put("/medicalRecord?firstName=Ross&lastName=Geller")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"birthdate":"10/18/1982"}
+                                """))
+                .andExpect(status().isNotFound());
+
+        mvc.perform(put("/medicalRecord")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"birthdate":"10/18/1982"}
+                                """))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void delete_edge_cases() throws Exception {
+        when(medicalRecordCrudService.delete("Monica", "Geller")).thenReturn(true);
+        mvc.perform(delete("/medicalRecord?firstName=Monica&lastName=Geller"))
+                .andExpect(status().isNoContent());
+
+        when(medicalRecordCrudService.delete("Unknown", "Unk")).thenReturn(false);
+        mvc.perform(delete("/medicalRecord?firstName=Unknown&lastName=Unk"))
+                .andExpect(status().isNotFound());
+
+        mvc.perform(delete("/medicalRecord"))
+                .andExpect(status().isBadRequest());
+    }
+
+
 
 }
