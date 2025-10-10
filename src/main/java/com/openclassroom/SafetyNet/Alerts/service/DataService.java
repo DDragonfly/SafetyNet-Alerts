@@ -7,6 +7,7 @@ import com.openclassroom.SafetyNet.Alerts.model.Firestation;
 import com.openclassroom.SafetyNet.Alerts.model.MedicalRecord;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -23,38 +24,63 @@ public class DataService {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
+    @Value("${safetynet.data.path:classpath:data.json}")
+    private String dataPath;
+
+    @Value("${safetynet.data.readOnly:false}")
+    private boolean readOnly;
+
         @PostConstruct
         public void init () {
-            log.info("Loading data.json from classpath...");
-            try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("data.json")) {
-                if (inputStream == null) {
-                    log.error("data.json not found on classpath: /resources/data.json");
-                    throw new IllegalStateException("data.json not found");
-                }
+            log.info("Loading data.json from {}", dataPath);
+            try {
+                InputStream input;
 
-                this.dataWrapper = mapper.readValue(inputStream, DataWrapper.class);
+                if (dataPath.startsWith("classpath:")) {
+                    String cp = dataPath.substring("classpath:".length());
+                    input = getClass().getClassLoader().getResourceAsStream(cp);
+                } else {
+                    input =new java.io.FileInputStream(new File(dataPath));
+                }
+                if (input == null) {
+                    log.error("data.json not found on classpath: /resources/data.json");
+                    throw new IllegalStateException("can't open data at " + dataPath);
+                }
+                this.dataWrapper = mapper.readValue(input, DataWrapper.class);
                 log.info("Data loaded: {} persons, {} firestations, {} medical records",
                         dataWrapper.getPersons().size(),
                         dataWrapper.getFirestations().size(),
                         dataWrapper.getMedicalrecords().size());
             } catch (Exception e) {
-                log.error("Failed to load data.json: {}", e.getMessage(), e);
+                log.error("Failed to load {}: {}", dataPath, e.getMessage());
                 throw new IllegalStateException("Cannot bootstrap application data", e);
             }
         }
 
     private void saveToFile() {
+
+            if (dataPath.startsWith("classpath:")) {
+                // on ne peut pas ecrire des tests dans le classpath
+                log.warn("Configured dataPath is on classpath ({}): skipping write. Use a filesystem path for writing tests.", dataPath);
+                return;
+            }
         try {
-            File file = new File("src/main/resources/data.json");
+            File file = new File(dataPath);
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, dataWrapper);
+            log.info("Data persisted to {}", file.getAbsolutePath());
         } catch (IOException e) {
-            log.error("Failed to write data.json: {}", e.getMessage(), e);
+            log.error("Failed to write {}: {}", dataPath, e.getMessage(), e);
         }
     }
 
     public void persist() {
+            if(readOnly) {
+                log.debug("Read-only mode: skipping file writing");
+                return;
+            }
             saveToFile();
     }
+
 
         // GETTERS
 

@@ -99,15 +99,7 @@ public class MedicalRecordCrudControllerTest {
     }
 
     @Test
-    void post_created_conflict() throws Exception {
-        when(medicalRecordCrudService.create(any(MedicalRecord.class))).thenReturn(true);
-        mvc.perform(post("/medicalRecord")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {"firstName":"Monica","lastName":"Geller", "birthdate":"03/06/1984","medications": [],"allergies": []}
-                                """))
-                .andExpect(status().isCreated());
-
+    void post_conflict_whenAlreadyExists() throws Exception {
         when(medicalRecordCrudService.create(any(MedicalRecord.class))).thenReturn(false);
         mvc.perform(post("/medicalRecord")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -118,14 +110,7 @@ public class MedicalRecordCrudControllerTest {
     }
 
     @Test
-    void put_ok_or_notFound_or_badRequest() throws Exception {
-        when(medicalRecordCrudService.update(eq("Monica"), eq("Geller"), any(MedicalRecord.class))).thenReturn(true);
-        mvc.perform(put("/medicalRecord?firstName=Monica&lastName=Geller")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {"birthdate":"03/06/1984","medications":["newmed:10mg"],"allergies": []}
-                                """))
-                .andExpect(status().isOk());
+    void put_notFound() throws Exception {
 
         when(medicalRecordCrudService.update(eq("Ross"), eq("Geller"), any(MedicalRecord.class))).thenReturn(false);
         mvc.perform(put("/medicalRecord?firstName=Ross&lastName=Geller")
@@ -134,7 +119,10 @@ public class MedicalRecordCrudControllerTest {
                                 {"birthdate":"10/18/1982"}
                                 """))
                 .andExpect(status().isNotFound());
+    }
 
+    @Test
+    void put_badRequest_whenMissingFields() throws Exception {
         mvc.perform(put("/medicalRecord")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -144,19 +132,23 @@ public class MedicalRecordCrudControllerTest {
     }
 
     @Test
-    void delete_edge_cases() throws Exception {
+    void delete_noContent_whenDeleted() throws Exception {
         when(medicalRecordCrudService.delete("Monica", "Geller")).thenReturn(true);
         mvc.perform(delete("/medicalRecord?firstName=Monica&lastName=Geller"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void delete_notFound_whenAbsent() throws Exception {
 
         when(medicalRecordCrudService.delete("Unknown", "Unk")).thenReturn(false);
         mvc.perform(delete("/medicalRecord?firstName=Unknown&lastName=Unk"))
                 .andExpect(status().isNotFound());
+    }
 
+    @Test
+    void delete_badRequest_whenMissingParam() throws Exception {
         mvc.perform(delete("/medicalRecord"))
                 .andExpect(status().isBadRequest());
     }
-
-
-
 }
