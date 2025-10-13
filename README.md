@@ -1,131 +1,143 @@
-🧯 SafetyNet Alerts
+# SafetyNet Alerts
 
-Projet OpenClassrooms – Parcours Développeur d’application Java
-Mission : créer une application web RESTful en Spring Boot pour gérer les données de sécurité d’une ville fictive.
+**Projet OpenClassrooms – Parcours Développeur d’application Java**
 
-🚀 Objectif du projet
+Ce projet a pour objectif de créer une application web RESTful en **Spring Boot** permettant de gérer les données de sécurité d’une ville fictive.
+
+---
+
+## 🚀 Objectif du projet
 
 Développer une API REST capable de :
 
-Lire les données depuis un fichier JSON (data.json) ;
+- Lire les données depuis un fichier JSON (`data.json`)
+    
+- Exposer des **endpoints REST** pour accéder aux informations de personnes, casernes et dossiers médicaux
+    
+- Fournir des endpoints spécifiques pour les **alertes** :
+    
 
-Exposer des endpoints REST pour accéder aux informations de personnes, casernes et dossiers médicaux ;
+|Endpoint|Description|
+|---|---|
+|`/firestation?stationNumber={number}`|Personnes couvertes par une caserne|
+|`/childAlert?address={address}`|Enfants et adultes d’un foyer|
+|`/phoneAlert?firestation={number}`|Numéros de téléphone d’une caserne|
+|`/fire?address={address}`|Informations des habitants en cas d’incendie|
+|`/flood/stations?stations={list}`|Ménages couverts par plusieurs casernes|
+|`/personInfo?lastName={name}`|Détails d’une personne|
+|`/communityEmail?city={city}`|E-mails des habitants d’une ville|
 
-Fournir des endpoints spécifiques pour les alertes :
+---
 
-/firestation?stationNumber={number} – personnes couvertes par une caserne
+## 🧱 Architecture du projet
 
-/childAlert?address={address} – enfants et adultes d’un foyer
+- Spring Boot 3.5.4
+    
+- Java 21
+    
+- Architecture MVC
+    
+- Persistance simulée via le fichier `data.json`
+    
+- Logging avec **SLF4J** (`@Slf4j`)
+    
+- Tests unitaires et d’intégration avec **JUnit 5** et **Mockito**
+    
 
-/phoneAlert?firestation={number} – numéros de téléphone d’une caserne
+---
 
-/fire?address={address} – informations des habitants en cas d’incendie
+## ⚙️ Configuration
 
-/flood/stations?stations={list} – ménages couverts par plusieurs casernes
+### Fichiers de propriétés
 
-/personInfo?lastName={name} – détails d’une personne
+|Fichier|Description|
+|---|---|
+|`application.properties`|Configuration principale (lecture/écriture sur `data.json`)|
+|`application-test.properties`|Profil de test (lecture seule sur `data-test.json`)|
 
-/communityEmail?city={city} – e-mails des habitants d’une ville
+---
 
-🧱 Architecture du projet
+### Lancer les tests
 
-Spring Boot 3.5.4
+`mvn clean verify`
 
-Java 21
+### Lancer l’application
 
-Architecture MVC
+`mvn spring-boot:run`
 
-Persistance simulée via fichier data.json
+Puis accéder à :  
+👉 [http://localhost:8080](http://localhost:8080)
 
-Logs avec @Slf4j
+---
 
-Tests :
+## 🧪 Profils d’exécution
 
-@WebMvcTest pour les contrôleurs REST
+|Profil|Description|
+|---|---|
+|`default`|Mode normal (lecture/écriture sur `data.json`)|
+|`test`|Tests d’intégration en lecture seule|
+|`it`|Tests d’intégration complets sur un fichier temporaire|
 
-@SpringBootTest pour les tests d’intégration
+---
 
-@ExtendWith(MockitoExtension.class) pour les tests unitaires purs
+## 📂 Structure du projet
 
-Couverture > 90 % (JaCoCo)
+`src/  ├─ main/java/com/openclassroom/SafetyNet/Alerts/  │   ├─ controller/  │   ├─ dto/  │   ├─ model/  │   └─ service/  │  └─ test/java/com/openclassroom/SafetyNet/Alerts/      ├─ controller/      ├─ service/      └─ integration/`
 
-Rapports disponibles dans target/site/
+---
 
-⚙️ Configuration
-Fichiers de propriétés
-Fichier	Description
-application.properties	configuration principale (lecture/écriture)
-application-test.properties	profil de test, lecture seule sur data-test.json
-Lancer les tests
-mvn clean verify
+## 🧰 Technologies principales
 
-Lancer l’application
-mvn spring-boot:run
+- Spring Boot
+    
+- Jackson (ObjectMapper)
+    
+- Lombok
+    
+- SLF4J
+    
+- JUnit 5 / Mockito
+    
+- JaCoCo / Surefire
+    
 
+---
 
-URL par défaut : http://localhost:8080
+## 🧪 Résultats de test
 
-🧪 Profils d’exécution
-Profil	Description
-default	mode normal (lecture/écriture sur data.json)
-test	tests d’intégration en lecture seule
-it	tests d’intégration complets avec fichier temporaire
-📂 Structure du projet
-src/
- ├─ main/java/com/openclassroom/SafetyNet/Alerts/
- │   ├─ controller/
- │   ├─ dto/
- │   ├─ model/
- │   └─ service/
- │
- └─ test/java/com/openclassroom/SafetyNet/Alerts/
-     ├─ controller/
-     ├─ service/
-     └─ integration/
+- 79 tests unitaires et d’intégration
+    
+- Couverture globale : **91 %**
+    
+- Tous les tests réussissent ✅
+    
 
-🧰 Technologies principales
+---
 
-Spring Boot
+## 🏷️ Versioning & Git
 
-Jackson (ObjectMapper)
+- Branche principale : `main`
+    
+- Branche de développement : `dev`
+    
+- Commits nommés selon le format : `feat:`, `fix:`, `test:`, etc.
+    
 
-Lombok
+### Créer le tag final
 
-SLF4J
+`git checkout dev git merge main git tag -a v1.0.0 -m "Version finale du projet SafetyNet Alerts" git push origin main --tags`
 
-JUnit 5 / Mockito
+---
 
-JaCoCo / Surefire
+## 👩‍💻 Auteur
 
-🧪 Résultats de test
+**Désirée Telaretti**  
+Étudiante OpenClassrooms – _Développeur d’application Java_  
+Nice, France
 
-79 tests unitaires et d’intégration
+---
 
-Couverture globale 91 %
+## 📄 Licence
 
-Tous les tests réussissent ✅
-
-🏷️ Versioning & Git
-
-Branche principale : main
-
-Branche de développement : dev
-
-Commits : feat:, fix:, test:, etc.
-
-Créer le tag final
-git checkout dev
-git merge main
-git tag -a v1.0.0 -m "Version finale du projet SafetyNet Alerts"
-git push origin main --tags
-
-🧑‍💻 Auteur
-
-Désirée Telaretti
-Étudiante OpenClassrooms – Développeur d’application Java
-
-
-📄 Licence
-
-Projet réalisé dans le cadre du parcours OpenClassrooms.
+Projet réalisé dans le cadre du parcours OpenClassrooms.  
 Usage pédagogique uniquement.
