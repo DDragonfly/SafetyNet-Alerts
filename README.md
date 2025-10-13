@@ -82,7 +82,19 @@ Puis accéder à :
 
 ## 📂 Structure du projet
 
-`src/  ├─ main/java/com/openclassroom/SafetyNet/Alerts/  │   ├─ controller/  │   ├─ dto/  │   ├─ model/  │   └─ service/  │  └─ test/java/com/openclassroom/SafetyNet/Alerts/      ├─ controller/      ├─ service/      └─ integration/`
+``` 
+src/
+  ├─ main/java/com/openclassroom/SafetyNet/Alerts/  
+  │	  ├─ controller/  
+  │	  ├─ dto/  
+  │   ├─ model/  
+  │   └─ service/  
+  │  
+  └─ test/java/com/openclassroom/SafetyNet/Alerts/      
+	  ├─ controller/      
+	  ├─ service/      
+	  └─ integration/
+```
 
 ---
 
@@ -120,20 +132,12 @@ Puis accéder à :
     
 - Branche de développement : `dev`
     
-- Commits nommés selon le format : `feat:`, `fix:`, `test:`, etc.
-    
-
-### Créer le tag final
-
-`git checkout dev git merge main git tag -a v1.0.0 -m "Version finale du projet SafetyNet Alerts" git push origin main --tags`
-
 ---
 
 ## 👩‍💻 Auteur
 
 **Désirée Telaretti**  
 Étudiante OpenClassrooms – _Développeur d’application Java_  
-Nice, France
 
 ---
 
