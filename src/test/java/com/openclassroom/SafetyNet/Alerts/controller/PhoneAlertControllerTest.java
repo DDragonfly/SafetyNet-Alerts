@@ -23,6 +23,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test du contrôleur {@link com.openclassroom.SafetyNet.Alerts.controller.PhoneAlertController}.
+ * <p>
+ * Vérifie le retour des numéros de téléphone pour une caserne donnée.
+ */
 @WebMvcTest(
         controllers = PhoneAlertController.class,
         excludeAutoConfiguration = {

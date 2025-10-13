@@ -16,6 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service métier pour l’endpoint /firestation.
+ * <p>
+ * Fournit les informations de couverture d’une caserne :
+ * liste des personnes couvertes et répartition entre adultes et enfants.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,7 +29,13 @@ public class FirestationService {
 
     private final DataService dataService;
 
-    public FirestationCoverageDTO getCoverageByStationNumber(String stationNumber){
+    /**
+     * Calcule la couverture pour un numéro de caserne.
+     *
+     * @param stationNumber numéro de caserne (ex: "1")
+     * @return DTO de couverture avec liste des personnes et décompte adultes/enfants.
+     */
+    public FirestationCoverageDTO getCoverageByStationNumber(String stationNumber) {
 
         log.info("Calculating coverage for station {}", stationNumber);
 
@@ -32,7 +44,7 @@ public class FirestationService {
                 .map(Firestation::getAddress)
                 .toList();
 
-        if (addresses.isEmpty()){
+        if (addresses.isEmpty()) {
             FirestationCoverageDTO empty = new FirestationCoverageDTO();
             empty.setPersons((List.of()));
             empty.setAdultCount(0);

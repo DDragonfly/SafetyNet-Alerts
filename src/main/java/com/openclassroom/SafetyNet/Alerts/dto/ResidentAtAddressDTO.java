@@ -1,8 +1,13 @@
 package com.openclassroom.SafetyNet.Alerts.dto;
 
 import lombok.Data;
+
 import java.util.List;
 
+/**
+ * DTO représentant un résident pour les endpoints /fire et /flood/stations.
+ * Contient prénom, nom, âge, téléphone, médications et allergies.
+ */
 @Data
 public class ResidentAtAddressDTO {
     private String firstName;

@@ -23,6 +23,12 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test du contrôleur {@link com.openclassroom.SafetyNet.Alerts.controller.PersonController}.
+ * <p>
+ * Vérifie les endpoints d’accès aux personnes et leurs données
+ * en simulant le service via {@link org.mockito.Mock}.
+ */
 @WebMvcTest(
         controllers = PersonController.class,
         excludeAutoConfiguration = {

@@ -22,6 +22,12 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Tests du contrôleur REST {@link com.openclassroom.SafetyNet.Alerts.controller.MedicalRecordCrudController}.
+ * <p>
+ * Vérifie les endpoints CRUD (/medicalRecord) via MockMvc
+ * en simulant les réponses du service métier.
+ */
 @WebMvcTest(
         controllers = MedicalRecordCrudController.class,
         excludeAutoConfiguration = {

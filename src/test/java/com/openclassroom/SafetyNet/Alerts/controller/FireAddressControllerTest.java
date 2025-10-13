@@ -24,6 +24,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test du contrôleur {@link com.openclassroom.SafetyNet.Alerts.controller.FireAddressController}.
+ * <p>
+ * Vérifie la structure de réponse de l’endpoint <code>/fire?address=...</code>.
+ */
 @WebMvcTest(
         controllers = FireAddressController.class,
         excludeAutoConfiguration = {

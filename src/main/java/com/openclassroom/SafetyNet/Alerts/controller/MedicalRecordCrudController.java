@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Contrôleur REST CRUD pour /medicalRecord.
+ * POST/PUT/DELETE basés sur le couple (firstName,lastName) comme identifiant.
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +29,12 @@ public class MedicalRecordCrudController {
         return medicalRecordCrudService.getAll();
     }
 
-    // POST /medicalRecord -> creation nouveau dossier
+    /**
+     * POST /medicalRecord
+     *
+     * @param body dossier médical à créer (firstName/lastName/birthdate requis)
+     * @return 201 si créé; 409 s'il existe déjà; 400 si données invalides.
+     */
     @PostMapping
     public ResponseEntity<?> create(@RequestBody MedicalRecord body) {
         if (isBlank(body.getFirstName()) || isBlank(body.getLastName()) || isBlank(body.getBirthdate())) {
@@ -62,5 +71,7 @@ public class MedicalRecordCrudController {
         return ResponseEntity.noContent().build();
     }
 
-    private boolean isBlank(String s) { return s == null || s.isBlank(); }
+    private boolean isBlank(String s) {
+        return s == null || s.isBlank();
+    }
 }

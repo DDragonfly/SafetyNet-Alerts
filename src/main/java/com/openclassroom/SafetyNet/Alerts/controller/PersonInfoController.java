@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Contrôleur REST pour /personInfo.
+ * Retourne les fiches détaillées (âge, médications, allergies) des personnes
+ * correspondant à un nom de famille.
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +24,7 @@ public class PersonInfoController {
     private final PersonInfoService personInfoService;
 
     @GetMapping("/personInfo")
-    public ResponseEntity<List<PersonInfoDTO>> getPersonInfo(@RequestParam("lastName") String lastName){
+    public ResponseEntity<List<PersonInfoDTO>> getPersonInfo(@RequestParam("lastName") String lastName) {
         log.info("GET /personInfo?lastName={} - incoming", lastName);
         List<PersonInfoDTO> body = personInfoService.getPersonInfoByLastName(lastName);
         log.info("GET /personInfo - ok: count={}", body.size());

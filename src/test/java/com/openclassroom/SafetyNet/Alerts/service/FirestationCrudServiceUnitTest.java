@@ -7,12 +7,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * Tests unitaires du service CRUD {@link com.openclassroom.SafetyNet.Alerts.service.FirestationCrudService}.
+ * <p>
+ * Utilise des mocks pour vérifier la délégation correcte vers {@link com.openclassroom.SafetyNet.Alerts.service.DataService}.
+ */
 @ExtendWith(MockitoExtension.class)
 public class FirestationCrudServiceUnitTest {
 

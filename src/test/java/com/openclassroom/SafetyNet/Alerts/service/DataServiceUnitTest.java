@@ -19,6 +19,12 @@ import static org.assertj.core.api.Assertions.*;
 
 public class DataServiceUnitTest {
 
+    /**
+     * Tests unitaires du service {@link com.openclassroom.SafetyNet.Alerts.service.DataService}.
+     * <p>
+     * Vérifie le chargement, la persistance et la manipulation des données en mémoire
+     * à partir de fichiers JSON temporaires.
+     */
     @TempDir
     public Path tmp;
 
@@ -65,7 +71,7 @@ public class DataServiceUnitTest {
         ReflectionTestUtils.setField(svc, "readOnly", true);
 
         assertThatThrownBy(svc::init)
-        .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Cannot bootstrap application data");
     }
 
@@ -95,7 +101,7 @@ public class DataServiceUnitTest {
         ReflectionTestUtils.setField(svc, "dataPath", target.toString());
         ReflectionTestUtils.setField(svc, "readOnly", false);
 
-        var dw =emptyDW();
+        var dw = emptyDW();
         dw.getPersons().add(new Person());
         ReflectionTestUtils.setField(svc, "dataWrapper", dw);
 
@@ -124,24 +130,24 @@ public class DataServiceUnitTest {
         ReflectionTestUtils.setField(svc, "dataPath", "classpath:data.json");
         ReflectionTestUtils.setField(svc, "readOnly", true);
 
-        var dw =emptyDW();
+        var dw = emptyDW();
         ReflectionTestUtils.setField(svc, "dataWrapper", dw);
 
-        var p =new Person();
+        var p = new Person();
         p.setFirstName("Monica");
         p.setLastName("Geller");
         p.setAddress("12 Monica St");
         assertThat(svc.addPerson(p)).isTrue();
 
-        var update =new Person();
+        var update = new Person();
         update.setAddress("Central Perk");
         update.setCity("New York");
         update.setZip("11111");
         update.setPhone("111-111-1111");
         update.setEmail("monica@gmail.com");
-        assertThat(svc.updatePerson("Monica","Geller",update)).isTrue();
+        assertThat(svc.updatePerson("Monica", "Geller", update)).isTrue();
 
-        assertThat(svc.deletePerson("Monica","Geller")).isTrue();
+        assertThat(svc.deletePerson("Monica", "Geller")).isTrue();
 
     }
 
@@ -152,25 +158,25 @@ public class DataServiceUnitTest {
         var svc = new DataService();
         ReflectionTestUtils.setField(svc, "dataPath", "classpath:data.json");
         ReflectionTestUtils.setField(svc, "readOnly", true);
-        var dw =emptyDW();
+        var dw = emptyDW();
         ReflectionTestUtils.setField(svc, "dataWrapper", dw);
 
-        var fs =new Firestation();
+        var fs = new Firestation();
         fs.setAddress("12 St");
         fs.setStation("1");
         assertThat(svc.addFirestation(fs)).isTrue();
 
-        assertThat(svc.updateFirestationStation("12 St","2")).isTrue();
+        assertThat(svc.updateFirestationStation("12 St", "2")).isTrue();
 
         assertThat(svc.deleteFirestationByAddress("12 St")).isTrue();
 
-        var fs1 =new Firestation();
+        var fs1 = new Firestation();
         fs1.setAddress("A");
         fs1.setStation("5");
-        var fs2 =new Firestation();
+        var fs2 = new Firestation();
         fs2.setAddress("B");
         fs2.setStation("5");
-        dw.getFirestations().addAll(List.of(fs1,fs2));
+        dw.getFirestations().addAll(List.of(fs1, fs2));
 
         assertThat(svc.deleteFirestationsByStation("5")).isTrue();
     }
@@ -182,9 +188,9 @@ public class DataServiceUnitTest {
         var svc = new DataService();
         ReflectionTestUtils.setField(svc, "dataPath", "classpath:data.json");
         ReflectionTestUtils.setField(svc, "readOnly", true);
-        var dw =emptyDW();
+        var dw = emptyDW();
         ReflectionTestUtils.setField(svc, "dataWrapper", dw);
-        var mr =new MedicalRecord();
+        var mr = new MedicalRecord();
         mr.setFirstName("Ross");
         mr.setLastName("Geller");
         mr.setBirthdate("01/01/1980");
@@ -192,13 +198,13 @@ public class DataServiceUnitTest {
         mr.setAllergies(List.of());
         assertThat(svc.addMedicalRecord(mr)).isTrue();
 
-        var update =new MedicalRecord();
+        var update = new MedicalRecord();
         update.setBirthdate("01/01/1980");
         update.setMedications(List.of("newMed:5"));
         update.setAllergies(List.of("cats"));
-        assertThat(svc.updateMedicalRecord("Ross","Geller",update)).isTrue();
+        assertThat(svc.updateMedicalRecord("Ross", "Geller", update)).isTrue();
 
-        assertThat(svc.deleteMedicalRecord("Ross","Geller")).isTrue();
+        assertThat(svc.deleteMedicalRecord("Ross", "Geller")).isTrue();
     }
 
 }

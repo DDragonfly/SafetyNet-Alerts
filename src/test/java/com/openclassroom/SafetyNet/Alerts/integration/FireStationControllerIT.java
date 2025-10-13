@@ -11,6 +11,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test d’intégration du contrôleur {@link com.openclassroom.SafetyNet.Alerts.controller.FirestationController}.
+ * <p>
+ * Vérifie le bon fonctionnement de l’endpoint <code>/firestation?stationNumber={n}</code>
+ * via {@link org.springframework.test.web.servlet.MockMvc}.
+ */
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc

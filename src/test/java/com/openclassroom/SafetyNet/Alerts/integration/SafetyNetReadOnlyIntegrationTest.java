@@ -11,6 +11,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Tests d’intégration globaux sur l’application SafetyNet Alerts.
+ * <p>
+ * Vérifie que le chargement initial du fichier JSON fonctionne
+ * et que les données principales (personnes, casernes, dossiers médicaux)
+ * sont accessibles en mode lecture seule.
+ */
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc

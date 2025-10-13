@@ -15,6 +15,12 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+/**
+ * Tests unitaires du service {@link com.openclassroom.SafetyNet.Alerts.service.FloodStationsService}.
+ * <p>
+ * Vérifie la construction correcte des ménages et le calcul des résidents
+ * à partir des numéros de casernes fournis.
+ */
 @ExtendWith(MockitoExtension.class)
 public class FirestationServiceUnitTest {
 

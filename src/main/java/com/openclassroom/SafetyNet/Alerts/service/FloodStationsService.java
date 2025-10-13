@@ -16,6 +16,11 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Service pour l'endpoint /flood/stations: regroupe les ménages par adresse
+ * pour un ensemble de casernes
+ * et associe à chaque foyer la liste complète de ses résidents avec leurs informations médicales.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,6 +28,12 @@ public class FloodStationsService {
 
     private final DataService dataService;
 
+    /**
+     * Retourne les foyers (adresses et résidents) couverts par les casernes indiquées.
+     *
+     * @param stationNumbers liste des numéros de caserne (ex : ["1","2"])
+     * @return liste ordonnée d’adresses avec leurs résidents ; liste vide si aucune adresse couverte
+     */
     public List<AddressHouseholdDTO> getHouseholdsByStations(List<String> stationNumbers) {
         log.info("Calculating /flood/stations for {}", stationNumbers);
 

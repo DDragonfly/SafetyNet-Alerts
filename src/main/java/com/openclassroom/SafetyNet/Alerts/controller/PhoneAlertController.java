@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Contrôleur REST pour /phoneAlert.
+ * Retourne les numéros de téléphone des habitants couverts par une caserne donnée.
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor

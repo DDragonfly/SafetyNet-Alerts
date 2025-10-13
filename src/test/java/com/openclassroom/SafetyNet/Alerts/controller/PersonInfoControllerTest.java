@@ -21,6 +21,12 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test du contrôleur {@link com.openclassroom.SafetyNet.Alerts.controller.PersonInfoController}.
+ * <p>
+ * Vérifie que l’endpoint <code>/personInfo</code> renvoie les bonnes données
+ * pour un nom donné et gère correctement les cas d’absence.
+ */
 @WebMvcTest(
         controllers = PersonInfoController.class,
         excludeAutoConfiguration = {
@@ -66,8 +72,8 @@ public class PersonInfoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()").value(2))
-                        .andExpect(jsonPath("$[0].firstName").value("Monica"))
-                        .andExpect(jsonPath("$[1].firstName").value("Ross"));
+                .andExpect(jsonPath("$[0].firstName").value("Monica"))
+                .andExpect(jsonPath("$[1].firstName").value("Ross"));
     }
 
     @Test
