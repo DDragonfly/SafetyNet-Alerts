@@ -6,7 +6,7 @@ Ce projet a pour objectif de créer une application web RESTful en **Spring Boot
 
 ---
 
-## 🚀 Objectif du projet
+## Objectif du projet
 
 Développer une API REST capable de :
 
@@ -29,7 +29,7 @@ Développer une API REST capable de :
 
 ---
 
-## 🧱 Architecture du projet
+## Architecture du projet
 
 - Spring Boot 3.5.4
     
@@ -46,7 +46,7 @@ Développer une API REST capable de :
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### Fichiers de propriétés
 
@@ -66,11 +66,11 @@ Développer une API REST capable de :
 `mvn spring-boot:run`
 
 Puis accéder à :  
-👉 [http://localhost:8080](http://localhost:8080)
+[http://localhost:8080](http://localhost:8080)
 
 ---
 
-## 🧪 Profils d’exécution
+## Profils d’exécution
 
 |Profil|Description|
 |---|---|
@@ -80,7 +80,7 @@ Puis accéder à :
 
 ---
 
-## 📂 Structure du projet
+## Structure du projet
 
 ``` 
 src/
@@ -98,7 +98,7 @@ src/
 
 ---
 
-## 🧰 Technologies principales
+## Technologies principales
 
 - Spring Boot
     
@@ -115,18 +115,18 @@ src/
 
 ---
 
-## 🧪 Résultats de test
+## Résultats de test
 
 - 79 tests unitaires et d’intégration
     
 - Couverture globale : **91 %**
     
-- Tous les tests réussissent ✅
+- Tous les tests réussissent
     
 
 ---
 
-## 🏷️ Versioning & Git
+## Versioning & Git
 
 - Branche principale : `main`
     
@@ -134,7 +134,7 @@ src/
     
 ---
 
-## 👩‍💻 Auteur
+## Auteur
 
 **Désirée Telaretti**  
 Étudiante OpenClassrooms – _Développeur d’application Java_  
